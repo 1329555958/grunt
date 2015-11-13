@@ -1,0 +1,2 @@
+/*! finlog - v0.1.0 - 2015-11-10 Copyright (c) 2015 vfinance; Licensed MIT */
+console.log("demo loaded!!!!"),require("app").register.controller("demoController",function($scope){$scope.name="wch",$scope.arr=["_jse","aaa"]});

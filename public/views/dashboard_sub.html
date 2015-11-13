@@ -1,0 +1,96 @@
+<div class="row" my-gridster="" ng-controller="dashboardSubController">
+    <div class="col-md-6 grid">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title"><a href="#">日志标签名称</a></h3>
+
+                <div class="box-tools">
+                    <i class="glyphicon glyphicon-resize-full"></i>
+                </div>
+            </div>
+            <div class="box-body zoom-out">
+                <div class="row">
+                    <div class="col-md-6 padding-v-5">
+                        <strong>查询条件</strong>
+                        <span>查询条件的值</span>
+                    </div>
+                    <div class="col-md-6 padding-v-5">
+                        <strong>查询条件</strong>
+                        <span>查询条件的值</span>
+                    </div>
+                    <div class="col-md-6 padding-v-5">
+                        <strong>查询条件</strong>
+                        <span>查询条件的值</span>
+                    </div>
+                    <div class="col-md-6 padding-v-5">
+                        <strong>查询条件</strong>
+                        <span>查询条件的值</span>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>查询条件</strong>
+                        <span>查询条件的值</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 border-bottom">
+                        <h2 style="text-align: center;">截至目前存在<strong>333333</strong>条记录</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                       警告设置
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        警告名称1：10分钟内日志数>10000。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 grid">
+        <div class="box box-primary" style="height: 344px;">
+            <i style="position: absolute;top: 148px;left: 50%;font-size: 50px;"
+               class="fa fa-plus-circle hover-icon" ng-click="showAdd()"></i>
+
+        </div>
+    </div>
+
+    <div class="modal" id="addDialog">
+        <div class="modal-dialog" style="width: 600px;">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title"></h3>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool">
+                            <i class="fa fa-remove large"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        <select class="form-control">
+                            <optgroup label="表格">
+                                <option value ="1">表格1</option>
+                                <option value ="2">表格2</option>
+                            </optgroup>
+                            <optgroup label="图表">
+                                <option value ="mercedes">图表1</option>
+                                <option value ="audi">图表2</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <button class="btn btn-success pull-right">
+                        确定
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

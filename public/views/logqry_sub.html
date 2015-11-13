@@ -1,0 +1,156 @@
+<div ng-controller="logqryTabController">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="input-group margin-bottom-10" ng-repeat="cond in addedConds">
+                <div class="input-group-btn">
+                    <select class="form-control" ng-model="addedConds[$index]">
+                        <option class="ng-hide" value="{{maxLengthField }}">{{maxLengthField}}
+                        </option>
+                        <option value="{{field}}" ng-selected="cond === field"
+                                ng-repeat="field in getReminderFields(addedConds[$index])">
+                            {{field}}
+                        </option>
+                    </select>
+                </div>
+                <input type="text" class="form-control" ng-model="condition[cond]" ng-change="delaySearch();">
+                                    <span class="input-group-addon no-border"><i
+                                            class="fa fa-trash chart-icon" ng-click="removeCond($index);"></i></span>
+            </div>
+            <div>
+                <button class="btn btn-plain" ng-click="addCondition();" ng-disabled="!hasCond">
+                    <i
+                            class="fa fa-plus-circle"></i>添加查询条件
+                </button>
+                <span ng-show="!hasCond">当前无条件可添加</span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <button class="btn btn-success" ng-click="search();">查询</button>
+            <button class="btn btn-default" ng-click="reset();">重置</button>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 5px;">
+        <div class="width-animate" ng-class="{'col-md-9':showEdit,'col-md-12':!showEdit}">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">
+                        <small>当前:{{hits.hits.length || 0}}/{{hits.total||0}}</small>
+                    </h3>
+
+                    <div class="box-tools data-tip" data-tip="编辑显示字段">
+                        <i class="fa  fa-cog large-x hover-icon " ng-click="showEdit=true;"></i>
+                    </div>
+                </div>
+                <div class="box-body no-padding">
+                    <table class="table table-bordered dataTable no-col-border kbn-table"
+                           style="margin: 0 !important;">
+                        <thead>
+                        <tr>
+                            <th style="width: 10px;"></th>
+                            <th ng-class="sort.field==='@timestamp'?('sorting_'+sort.type):'sorting'"
+                                style="width:160px;" ng-click="changeSort('@timestamp');">Time
+                            </th>
+                            <th ng-class="getSortClass(field)"
+                                ng-repeat="field in getShowFields()" ng-click="changeSort(field);">{{field}}
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody ng-repeat="rcd in hits.hits">
+                        <tr>
+                            <td><i ng-click="showRecordDetail[rcd['_id']]=!showRecordDetail[rcd['_id']]"
+                                   class="fa hover-icon"
+                                   ng-class="{'fa-caret-down':showRecordDetail[rcd['_id']],'fa-caret-right':!showRecordDetail[rcd['_id']]}"></i>
+                            </td>
+                            <td>{{rcd['_source']['@timestamp']}}</td>
+                            <td ng-repeat="field in getShowFields()"
+                                ng-bind-html="getFieldData(field, rcd)">
+                            </td>
+                        </tr>
+                        <tr ng-show="showRecordDetail[rcd['_id']]">
+                            <td colspan="{{getShowFields().length+2}}" class="no-padding">
+                                <div class="nav-tabs-custom no-margin">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a target=".t1-{{rcd['_id']}}"
+                                                              data-toggle="tab">Table</a>
+                                        </li>
+                                        <li><a target=".t2-{{rcd['_id']}}" data-toggle="tab">JSON</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active t1-{{rcd['_id']}}">
+                                            <table class="table kbn-table">
+                                                <tbody>
+                                                <tr ng-repeat="(key,val) in rcd">
+                                                    <td style="word-break: keep-all;">{{key}}</td>
+                                                    <td ng-bind-html="$root.JSONStringify(val)"></td>
+                                                </tr>
+                                                <tr ng-repeat="(key,val) in rcd['_source']">
+                                                    <td style="word-break: keep-all;">{{key}}</td>
+                                                    <td ng-bind-html="$root.JSONStringify(val)"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane t2-{{rcd['_id']}}">
+                                            <div ui-ace="{useWrapMode : true,mode:'json',advanced: {
+                                          highlightActiveLine: true
+                                        },
+                                        rendererOptions: {
+                                          showPrintMargin: false,
+                                          maxLines: 4294967296
+                                        }}" ng-model="jsonmodel" ng-init="jsonmodel=aceJson(rcd)" readonly></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tr>
+                            <td colspan="{{getShowFields().length+2}}">
+                                <button class="btn" style="width: 100%;" ng-click="search(true);">加载更多
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="overlay" ng-show="searching">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </div>
+            </div>
+        </div>
+        <div class="width-animate pull-right" ng-class="{'col-md-3':showEdit,'width-0':!showEdit}">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">编辑显示字段</h3>
+
+                    <div class="box-tools">
+                        <i class="fa fa-remove hover-icon" ng-click="showEdit=false;"></i>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <strong><i class="fa fa-check color-success"></i>已选字段</strong>
+                    <table class="table no-border table-hover mini-h">
+                        <tr ng-repeat="f in getShowFields()">
+                            <td class="hover-show-i">
+                                <span class="text-muted">{{f}}</span>
+                                <i class="fa-minus fa hover-icon pull-right" ng-click="removeShowField(f);"></i>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="box-body">
+                    <strong><i class="fa fa-circle-o color-success"></i>可选字段</strong>
+                    <table class="table no-border table-hover mini-h">
+                        <tr ng-repeat="f in getHidenFields()">
+                            <td class="hover-show-i">
+                                <span class="text-muted">{{f}}</span>
+                                <i class="fa-plus fa hover-icon pull-right" ng-click="addShowField(f);"></i>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
