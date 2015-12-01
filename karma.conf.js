@@ -3,7 +3,7 @@
 
 module.exports = function (config) {
     var _ = require('lodash');
-    var paths = require('./public/lib/js/require-config').paths;
+    var paths = require('./public/lib/js/require-config').karma_paths;
     var files = _.chain(paths).values().transform(function (result, val) {
         result.push({pattern: '.' + val + '.js', included: false});
     }).value();
@@ -65,7 +65,7 @@ module.exports = function (config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome'],
+        browsers: ['PhantomJS'],
 
 
         // Continuous Integration mode
