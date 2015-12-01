@@ -1,6 +1,7 @@
 /**
  * Created by weichunhe on 2015/11/8.
  * http://jscs.info/rules
+ *
  */
 module.exports = function (grunt) {
     return { //如果执行的时候发现不可理解的提示时很有可能是因为你的grunt-jscs 插件安装不完全

@@ -47,7 +47,11 @@ module.exports = function (grunt) {
                 {src: 'bower_components/AdminLTE/dist/css/**/*.min.*', dest: cfg.release},
                 {src: 'bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css', dest: cfg.release},
                 {
-                    src: 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.standalone.min.css',
+                    src: 'bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+                    dest: cfg.release
+                },
+                {
+                    src: 'bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datepicker3.standalone.min.css',
                     dest: cfg.release
                 },
                 {
